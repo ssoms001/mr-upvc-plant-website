@@ -1,0 +1,7 @@
+# MR UPVC Website
+# https://www.mrupvc.com (replace with actual domain)
+
+User-agent: *
+Allow: /
+
+Sitemap: sitemap.xml
