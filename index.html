@@ -22,6 +22,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
     rel="stylesheet">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
   <link rel="stylesheet" href="styles.css" />
 </head>
 
@@ -370,71 +371,95 @@
     <section id="testimonials">
       <div class="container">
         <div class="section-head" style="text-align: center;" data-reveal>
-          <h2>Reviews & Contact</h2>
-          <p>What our customers say — and how to reach us.</p>
+          <h2>Reviews &amp; Contact</h2>
+          <p>Our project locations, customer stories &amp; how to reach us.</p>
         </div>
-        <div class="reviews-contact-grid" data-reveal>
-          <!-- Left: Compact Reviews -->
-          <div class="reviews-col">
-            <div class="review-mini">
-              <div class="review-mini-top">
-                <div class="testimonial-avatar">R</div>
-                <div>
-                  <strong>Rajesh Kumar</strong>
-                  <span class="testimonial-stars-sm">★★★★★</span>
-                </div>
+
+        <div class="rc-three-panel" data-reveal>
+
+          <!-- LEFT: Interactive Project Map -->
+          <div class="rc-map-col">
+            <div class="rc-map-header">
+              <span class="rc-map-pin">📍</span>
+              <div>
+                <h3>Project Locations</h3>
+                <p>Click a pin or list item to explore our work sites</p>
               </div>
-              <p class="review-mini-text">"Transformed our home with beautiful sliding windows. Outstanding quality and
-                perfect installation!"</p>
             </div>
-            <div class="review-mini">
-              <div class="review-mini-top">
-                <div class="testimonial-avatar">S</div>
-                <div>
-                  <strong>Suresh Constructions</strong>
-                  <span class="testimonial-stars-sm">★★★★★</span>
-                </div>
+            <div class="rc-map-body">
+              <div class="map-sidebar" id="mapSidebar">
+                <p class="map-sidebar-title">Our Sites</p>
+                <div id="mapLocationList"></div>
               </div>
-              <p class="review-mini-text">"On-time delivery, consistent quality, competitive pricing. A reliable partner
-                for builders."</p>
-            </div>
-            <div class="review-mini">
-              <div class="review-mini-top">
-                <div class="testimonial-avatar">P</div>
-                <div>
-                  <strong>Priya Lakshmi</strong>
-                  <span class="testimonial-stars-sm">★★★★★</span>
-                </div>
-              </div>
-              <p class="review-mini-text">"Excellent sound insulation! So peaceful now. Professional team completed work
-                in just 2 days."</p>
+              <div id="projectMap"></div>
             </div>
           </div>
-          <!-- Right: Compact Contact Form -->
-          <div class="contact-col" id="contact">
-            <h3 style="margin: 0 0 12px; text-align: center;">Get In Touch</h3>
-            <form class="contact-form-compact" id="contactForm">
-              <input type="text" id="contactName" name="name" required placeholder="Your Name *">
-              <input type="tel" id="contactPhone" name="phone" required placeholder="Phone Number *">
-              <select id="contactService" name="service">
-                <option value="">Service needed...</option>
-                <option value="windows">uPVC Windows</option>
-                <option value="doors">uPVC Doors</option>
-                <option value="both">Windows & Doors</option>
-                <option value="consultation">Free Consultation</option>
-              </select>
-              <textarea id="contactMessage" name="message" rows="3" required placeholder="Your message..."></textarea>
-              <button type="submit" class="btn btn-submit" id="submitBtn">
-                <span class="btn-text">Send Message</span>
-                <span class="btn-loading" style="display:none;">Sending...</span>
-              </button>
-            </form>
-            <div class="form-success" id="formSuccess" style="display:none;">
-              <div class="success-icon">✓</div>
-              <p><strong>Thank you!</strong> We'll contact you within 24 hours.</p>
+
+          <!-- RIGHT COLUMN -->
+          <div class="rc-right-col">
+
+            <!-- RIGHT TOP: Reviews -->
+            <div class="rc-reviews-box">
+              <h3 class="rc-box-title">⭐ Customer Reviews</h3>
+              <div class="review-mini">
+                <div class="review-mini-top">
+                  <div class="testimonial-avatar">R</div>
+                  <div>
+                    <strong>Rajesh Kumar</strong>
+                    <span class="testimonial-stars-sm">★★★★★</span>
+                  </div>
+                </div>
+                <p class="review-mini-text">"Transformed our home with beautiful sliding windows. Outstanding quality and perfect installation!"</p>
+              </div>
+              <div class="review-mini">
+                <div class="review-mini-top">
+                  <div class="testimonial-avatar">S</div>
+                  <div>
+                    <strong>Suresh Constructions</strong>
+                    <span class="testimonial-stars-sm">★★★★★</span>
+                  </div>
+                </div>
+                <p class="review-mini-text">"On-time delivery, consistent quality, competitive pricing. A reliable partner for builders."</p>
+              </div>
+              <div class="review-mini">
+                <div class="review-mini-top">
+                  <div class="testimonial-avatar">P</div>
+                  <div>
+                    <strong>Priya Lakshmi</strong>
+                    <span class="testimonial-stars-sm">★★★★★</span>
+                  </div>
+                </div>
+                <p class="review-mini-text">"Excellent sound insulation! So peaceful now. Professional team completed work in just 2 days."</p>
+              </div>
             </div>
-          </div>
-        </div>
+
+            <!-- RIGHT BOTTOM: Contact Form -->
+            <div class="rc-contact-box" id="contact">
+              <h3 class="rc-box-title">✉️ Get In Touch</h3>
+              <form class="contact-form-compact" id="contactForm">
+                <input type="text" id="contactName" name="name" required placeholder="Your Name *">
+                <input type="tel" id="contactPhone" name="phone" required placeholder="Phone Number *">
+                <select id="contactService" name="service">
+                  <option value="">Service needed...</option>
+                  <option value="windows">uPVC Windows</option>
+                  <option value="doors">uPVC Doors</option>
+                  <option value="both">Windows &amp; Doors</option>
+                  <option value="consultation">Free Consultation</option>
+                </select>
+                <textarea id="contactMessage" name="message" rows="3" required placeholder="Your message..."></textarea>
+                <button type="submit" class="btn btn-submit" id="submitBtn">
+                  <span class="btn-text">Send Message</span>
+                  <span class="btn-loading" style="display:none;">Sending...</span>
+                </button>
+              </form>
+              <div class="form-success" id="formSuccess" style="display:none;">
+                <div class="success-icon">✓</div>
+                <p><strong>Thank you!</strong> We'll contact you within 24 hours.</p>
+              </div>
+            </div>
+
+          </div><!-- end rc-right-col -->
+        </div><!-- end rc-three-panel -->
       </div>
     </section>
 
@@ -490,6 +515,7 @@
     </div>
   </footer>
 
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <script src="script.js"></script>
 </body>
 

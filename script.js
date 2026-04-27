@@ -173,4 +173,107 @@ document.addEventListener('DOMContentLoaded', () => {
     }, 1000);
   });
 
+  // ===== Interactive Project Map (Leaflet) =====
+  const mapEl = document.getElementById('projectMap');
+  if (mapEl && typeof L !== 'undefined') {
+
+    const projectMap = L.map('projectMap', { zoomControl: true }).setView([12.8900, 80.1600], 12);
+
+    // Tile layer — OpenStreetMap
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '© <a href="https://openstreetmap.org">OpenStreetMap</a>',
+      maxZoom: 19
+    }).addTo(projectMap);
+
+    // Custom marker icon matching site colors
+    const mrIcon = L.divIcon({
+      className: '',
+      html: `<div style="
+        width:30px;height:30px;border-radius:50% 50% 50% 0;
+        background:linear-gradient(135deg,#00AEEF,#0b2530);
+        border:3px solid #daa520;
+        transform:rotate(-45deg);
+        box-shadow:0 3px 10px rgba(0,0,0,.3);
+      "></div>`,
+      iconSize: [30, 30],
+      iconAnchor: [15, 30],
+      popupAnchor: [0, -32]
+    });
+
+    // Project locations data
+    const workSites = [
+      { id: 1, name: 'Ponmar',         coords: [12.8727, 80.1765], images: ['IMG/R1.webp', 'IMG/L1.jpg'] },
+      { id: 2, name: 'Madambakkam',    coords: [12.8884, 80.1593], images: ['IMG/R2.jpg', 'IMG/L2.png'] },
+      { id: 3, name: 'Perungalathur',  coords: [12.9064, 80.0984], images: ['IMG/L11.webp', 'IMG/R11.webp'] },
+      { id: 4, name: 'Sithalapakkam', coords: [12.8797, 80.1904], images: ['IMG/R22.webp', 'IMG/L22.webp'] },
+      { id: 5, name: 'Karapakkam',     coords: [12.9157, 80.2285], images: ['IMG/L1.jpg', 'IMG/R1.webp'] },
+      { id: 6, name: 'Agaram Then',    coords: [12.8752, 80.1472], images: ['IMG/L2.png', 'IMG/R2.jpg'] },
+      { id: 7, name: 'Kovilancheri',   coords: [12.8631, 80.1795], images: ['IMG/R11.webp', 'IMG/L11.webp'] }
+    ];
+
+    const listContainer = document.getElementById('mapLocationList');
+    const mapMarkers = {};
+    let sliderInterval = null;
+
+    workSites.forEach(site => {
+      // Build popup HTML with image slider
+      const imgTags = site.images.map((src, i) =>
+        `<img src="${src}" alt="${site.name}" class="${i === 0 ? 'active' : ''}">`
+      ).join('');
+
+      const popup = L.popup({ maxWidth: 240, className: 'mr-map-popup' }).setContent(`
+        <div>
+          <div class="map-popup-slider" id="mslider-${site.id}">${imgTags}</div>
+          <div class="map-popup-label">📍 ${site.name} Site</div>
+        </div>
+      `);
+
+      const marker = L.marker(site.coords, { icon: mrIcon }).addTo(projectMap);
+      marker.bindPopup(popup);
+      mapMarkers[site.id] = marker;
+
+      // Image auto-slide on popup open
+      marker.on('popupopen', () => {
+        const sliderEl = document.getElementById(`mslider-${site.id}`);
+        if (!sliderEl) return;
+        const imgs = sliderEl.querySelectorAll('img');
+        if (imgs.length <= 1) return;
+        let idx = 0;
+        sliderInterval = setInterval(() => {
+          imgs[idx].classList.remove('active');
+          idx = (idx + 1) % imgs.length;
+          imgs[idx].classList.add('active');
+        }, 2000);
+      });
+
+      marker.on('popupclose', () => {
+        if (sliderInterval) { clearInterval(sliderInterval); sliderInterval = null; }
+      });
+
+      // Sidebar list item
+      const item = document.createElement('div');
+      item.className = 'map-loc-item';
+      item.innerHTML = `<strong>${site.name}</strong><small>Tap to view</small>`;
+      item.addEventListener('click', () => {
+        // highlight active
+        listContainer.querySelectorAll('.map-loc-item').forEach(el => el.classList.remove('active'));
+        item.classList.add('active');
+        projectMap.flyTo(site.coords, 16, { animate: true, duration: 1.2 });
+        setTimeout(() => mapMarkers[site.id].openPopup(), 1300);
+      });
+      listContainer.appendChild(item);
+    });
+
+    // Invalidate map size after section becomes visible (scroll reveal)
+    const mapObserver = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          setTimeout(() => projectMap.invalidateSize(), 200);
+          mapObserver.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.1 });
+    mapObserver.observe(mapEl);
+  }
+
 });
