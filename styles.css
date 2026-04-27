@@ -1249,7 +1249,7 @@ footer {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 24px;
-  align-items: start;
+  align-items: stretch;
 }
 
 /* --- Left: Map Column --- */
@@ -1382,13 +1382,13 @@ footer {
 .rc-right-col {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 10px;
 }
 
 .rc-box-title {
-  font-size: .95rem;
+  font-size: .82rem;
   font-weight: 700;
-  margin: 0 0 12px;
+  margin: 0 0 8px;
   color: var(--color-dark);
 }
 
@@ -1396,19 +1396,79 @@ footer {
   background: var(--color-white);
   border: 1px solid #e8ecf0;
   border-radius: 14px;
-  padding: 18px;
+  padding: 12px 14px;
   box-shadow: 0 2px 12px rgba(0,0,0,.05);
+  flex: 1;
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 7px;
+  overflow: hidden;
+}
+
+/* Shrink review items inside the box */
+.rc-reviews-box .review-mini {
+  padding: 8px 12px;
+  border-radius: 9px;
+}
+
+.rc-reviews-box .review-mini-top {
+  margin-bottom: 4px;
+}
+
+.rc-reviews-box .review-mini-top .testimonial-avatar {
+  width: 28px;
+  height: 28px;
+  font-size: .75rem;
+}
+
+.rc-reviews-box .review-mini-top strong {
+  font-size: .78rem;
+}
+
+.rc-reviews-box .review-mini-text {
+  font-size: .76rem;
+  line-height: 1.4;
+  margin: 0;
+}
+
+.rc-reviews-box .testimonial-stars-sm {
+  font-size: .7rem;
 }
 
 .rc-contact-box {
   background: var(--color-white);
   border: 1px solid #e8ecf0;
   border-radius: 14px;
-  padding: 18px;
+  padding: 12px 14px;
   box-shadow: 0 4px 16px rgba(0,0,0,.06);
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* Shrink contact form inputs to fit */
+.rc-contact-box .contact-form-compact {
+  gap: 6px;
+  flex: 1;
+}
+
+.rc-contact-box .contact-form-compact input,
+.rc-contact-box .contact-form-compact select {
+  padding: 7px 10px;
+  font-size: .8rem;
+}
+
+.rc-contact-box .contact-form-compact textarea {
+  padding: 7px 10px;
+  font-size: .8rem;
+  min-height: 48px;
+  resize: none;
+}
+
+.rc-contact-box .btn-submit {
+  padding: 9px;
+  font-size: .82rem;
 }
 
 /* --- Responsive --- */
