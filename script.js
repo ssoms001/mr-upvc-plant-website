@@ -29,11 +29,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // ===== Counter animation =====
   const nums = document.querySelectorAll('.num');
+
+  // Always reset to '0' so counter rolls from 0 on every page visit
+  nums.forEach(n => { n.textContent = '0'; });
+
   const animate = (el) => {
     const target = +el.dataset.target;
     const suffix = el.dataset.suffix || '';
     let curr = 0;
-    // Use more steps for large numbers so animation is smooth but fast
     const totalSteps = 60;
     const step = Math.max(1, Math.round(target / totalSteps));
     const tick = () => {
@@ -47,11 +50,16 @@ document.addEventListener('DOMContentLoaded', () => {
     };
     requestAnimationFrame(tick);
   };
+
+  // Threshold 0.2 — triggers as soon as stat cards are 20% visible
   const counterObserver = new IntersectionObserver((entries) => {
     entries.forEach(e => {
-      if (e.isIntersecting) { animate(e.target); counterObserver.unobserve(e.target); }
+      if (e.isIntersecting) {
+        animate(e.target);
+        counterObserver.unobserve(e.target);
+      }
     });
-  }, { threshold: 0.6 });
+  }, { threshold: 0.2, rootMargin: '0px 0px -20px 0px' });
   nums.forEach(n => counterObserver.observe(n));
 
   // ===== Mobile hamburger menu =====
@@ -184,94 +192,142 @@ document.addEventListener('DOMContentLoaded', () => {
   const mapEl = document.getElementById('projectMap');
   if (mapEl && typeof L !== 'undefined') {
 
-    const projectMap = L.map('projectMap', { zoomControl: true }).setView([12.8900, 80.1600], 12);
+    const projectMap = L.map('projectMap', {
+      zoomControl: false,           // we add it manually to bottom-right
+      attributionControl: true
+    }).setView([12.8900, 80.1600], 12);
 
-    // Tile layer — OpenStreetMap
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      attribution: '© <a href="https://openstreetmap.org">OpenStreetMap</a>',
+    // ── Light branded tile layer (CartoDB Positron — clean white) ──
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+      attribution: '© <a href="https://carto.com/">CARTO</a> © <a href="https://openstreetmap.org">OSM</a>',
+      subdomains: 'abcd',
       maxZoom: 19
     }).addTo(projectMap);
 
-    // Custom marker icon matching site colors
-    const mrIcon = L.divIcon({
-      className: '',
-      html: `<div style="
-        width:30px;height:30px;border-radius:50% 50% 50% 0;
-        background:linear-gradient(135deg,#00AEEF,#0b2530);
-        border:3px solid #daa520;
-        transform:rotate(-45deg);
-        box-shadow:0 3px 10px rgba(0,0,0,.3);
-      "></div>`,
-      iconSize: [30, 30],
-      iconAnchor: [15, 30],
-      popupAnchor: [0, -32]
-    });
+    // Move zoom control to bottom-right
+    L.control.zoom({ position: 'bottomright' }).addTo(projectMap);
 
-    // Project locations data
+    // ── Fit-All button (top-right) ─────────────────────────────
+    const FitAll = L.Control.extend({
+      options: { position: 'topright' },
+      onAdd() {
+        const btn = L.DomUtil.create('button', 'map-fitall-btn');
+        btn.title = 'Show all sites';
+        btn.innerHTML = '⊞';
+        L.DomEvent.on(btn, 'click', () => {
+          projectMap.flyToBounds(allBounds, { padding: [24, 24], duration: 1 });
+          listContainer.querySelectorAll('.map-loc-item').forEach(el => el.classList.remove('active'));
+        });
+        return btn;
+      }
+    });
+    new FitAll().addTo(projectMap);
+
+    // ── Animated pulse marker ──────────────────────────────────
+    const makePinIcon = (active = false) => L.divIcon({
+      className: '',
+      html: `
+        <div class="mr-pin-wrap${active ? ' mr-pin-active' : ''}">
+          <div class="mr-pin-dot"></div>
+          <div class="mr-pin-pulse"></div>
+        </div>`,
+      iconSize: [32, 32],
+      iconAnchor: [16, 28],
+      popupAnchor: [0, -30]
+    });
+    const pinIcon       = makePinIcon(false);
+    const pinIconActive = makePinIcon(true);
+
+    // ── Project locations ──────────────────────────────────────
     const workSites = [
-      { id: 1, name: 'Ponmar',         coords: [12.8727, 80.1765], images: ['IMG/R1.webp', 'IMG/L1.jpg'] },
-      { id: 2, name: 'Madambakkam',    coords: [12.8884, 80.1593], images: ['IMG/R2.jpg', 'IMG/L2.png'] },
-      { id: 3, name: 'Perungalathur',  coords: [12.9064, 80.0984], images: ['IMG/L11.webp', 'IMG/R11.webp'] },
-      { id: 4, name: 'Sithalapakkam', coords: [12.8797, 80.1904], images: ['IMG/R22.webp', 'IMG/L22.webp'] },
-      { id: 5, name: 'Karapakkam',     coords: [12.9157, 80.2285], images: ['IMG/L1.jpg', 'IMG/R1.webp'] },
-      { id: 6, name: 'Agaram Then',    coords: [12.8752, 80.1472], images: ['IMG/L2.png', 'IMG/R2.jpg'] },
-      { id: 7, name: 'Kovilancheri',   coords: [12.8631, 80.1795], images: ['IMG/R11.webp', 'IMG/L11.webp'] }
+      { id: 1, name: 'Ponmar',        coords: [12.8727, 80.1765], images: ['IMG/R1.webp',  'IMG/L1.jpg']  },
+      { id: 2, name: 'Madambakkam',   coords: [12.8884, 80.1593], images: ['IMG/R2.jpg',   'IMG/L2.png']  },
+      { id: 3, name: 'Perungalathur', coords: [12.9064, 80.0984], images: ['IMG/L11.webp', 'IMG/R11.webp']},
+      { id: 4, name: 'Sithalapakkam', coords: [12.8797, 80.1904], images: ['IMG/R22.webp', 'IMG/L22.webp']},
+      { id: 5, name: 'Karapakkam',    coords: [12.9157, 80.2285], images: ['IMG/L1.jpg',   'IMG/R1.webp'] },
+      { id: 6, name: 'Agaram Then',   coords: [12.8752, 80.1472], images: ['IMG/L2.png',   'IMG/R2.jpg']  },
+      { id: 7, name: 'Kovilancheri',  coords: [12.8631, 80.1795], images: ['IMG/R11.webp', 'IMG/L11.webp']}
     ];
 
     const listContainer = document.getElementById('mapLocationList');
-    const mapMarkers = {};
-    let sliderInterval = null;
+    const mapMarkers    = {};
+    const sidebarItems  = {};
+    let sliderInterval  = null;
+    let activeId        = null;
 
+    // Compute bounds for fit-all
+    const allBounds = L.latLngBounds(workSites.map(s => s.coords));
+
+    // ── Build markers & sidebar ────────────────────────────────
     workSites.forEach(site => {
-      // Build popup HTML with image slider
+      // Popup content
       const imgTags = site.images.map((src, i) =>
         `<img src="${src}" alt="${site.name}" class="${i === 0 ? 'active' : ''}">`
       ).join('');
 
-      const popup = L.popup({ maxWidth: 240, className: 'mr-map-popup' }).setContent(`
-        <div>
+      const popup = L.popup({
+        maxWidth: 230,
+        minWidth: 200,
+        className: 'mr-map-popup',
+        closeButton: true
+      }).setContent(`
+        <div class="mr-popup-inner">
           <div class="map-popup-slider" id="mslider-${site.id}">${imgTags}</div>
-          <div class="map-popup-label">📍 ${site.name} Site</div>
-        </div>
-      `);
+          <div class="mr-popup-footer">
+            <span class="mr-popup-dot">📍</span>
+            <strong>${site.name} Project Site</strong>
+          </div>
+        </div>`);
 
-      const marker = L.marker(site.coords, { icon: mrIcon }).addTo(projectMap);
+      const marker = L.marker(site.coords, { icon: pinIcon }).addTo(projectMap);
       marker.bindPopup(popup);
       mapMarkers[site.id] = marker;
 
-      // Image auto-slide on popup open
+      // Image slideshow on popup open
       marker.on('popupopen', () => {
+        // Update icons
+        if (activeId && mapMarkers[activeId]) mapMarkers[activeId].setIcon(pinIcon);
+        activeId = site.id;
+        marker.setIcon(pinIconActive);
+
+        // Highlight sidebar
+        Object.values(sidebarItems).forEach(el => el.classList.remove('active'));
+        if (sidebarItems[site.id]) sidebarItems[site.id].classList.add('active');
+
+        // Auto-slide images
         const sliderEl = document.getElementById(`mslider-${site.id}`);
         if (!sliderEl) return;
         const imgs = sliderEl.querySelectorAll('img');
         if (imgs.length <= 1) return;
         let idx = 0;
+        if (sliderInterval) clearInterval(sliderInterval);
         sliderInterval = setInterval(() => {
           imgs[idx].classList.remove('active');
           idx = (idx + 1) % imgs.length;
           imgs[idx].classList.add('active');
-        }, 2000);
+        }, 2200);
       });
 
       marker.on('popupclose', () => {
+        marker.setIcon(pinIcon);
+        activeId = null;
         if (sliderInterval) { clearInterval(sliderInterval); sliderInterval = null; }
+        Object.values(sidebarItems).forEach(el => el.classList.remove('active'));
       });
 
-      // Sidebar list item
+      // Sidebar item
       const item = document.createElement('div');
       item.className = 'map-loc-item';
       item.innerHTML = `<strong>${site.name}</strong><small>Tap to view</small>`;
       item.addEventListener('click', () => {
-        // highlight active
-        listContainer.querySelectorAll('.map-loc-item').forEach(el => el.classList.remove('active'));
-        item.classList.add('active');
         projectMap.flyTo(site.coords, 16, { animate: true, duration: 1.2 });
-        setTimeout(() => mapMarkers[site.id].openPopup(), 1300);
+        setTimeout(() => marker.openPopup(), 1300);
       });
       listContainer.appendChild(item);
+      sidebarItems[site.id] = item;
     });
 
-    // Invalidate map size after section becomes visible (scroll reveal)
+    // ── Invalidate on scroll-reveal ────────────────────────────
     const mapObserver = new IntersectionObserver(entries => {
       entries.forEach(e => {
         if (e.isIntersecting) {
@@ -284,3 +340,5 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
 });
+
+

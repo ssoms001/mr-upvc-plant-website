@@ -1003,6 +1003,115 @@ section {
   color: #555
 }
 
+/* ===== Compact Our Team Bar ===== */
+.our-team-bar {
+  background: var(--color-white);
+  border: 1px solid #e8ecf0;
+  border-radius: 14px;
+  padding: 14px 20px;
+  margin-top: 18px;
+  box-shadow: 0 2px 12px rgba(0,0,0,.06);
+}
+
+.our-team-bar-title {
+  font-size: .72rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: var(--color-primary);
+  margin: 0 0 12px;
+  text-align: center;
+  width: 100%;
+}
+
+.our-team-bar-members {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  flex-wrap: wrap;
+}
+
+.team-bar-member {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex: 1;
+  min-width: 200px;
+}
+
+.team-bar-photo {
+  width: 52px;
+  height: 52px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  box-shadow: 0 3px 10px rgba(0,0,0,.15);
+  overflow: hidden;
+}
+
+/* When showing a real photo */
+.team-bar-photo-img {
+  background: #e8ecf0;
+}
+
+.team-bar-photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top center;
+  display: block;
+}
+
+.team-bar-initial {
+  color: #fff;
+  font-size: 1.4rem;
+  font-weight: 800;
+}
+
+.team-bar-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.team-bar-post {
+  font-size: .72rem;
+  font-weight: 700;
+  color: var(--color-primary);
+  text-transform: uppercase;
+  letter-spacing: .4px;
+}
+
+.team-bar-name {
+  font-size: .88rem;
+  font-weight: 700;
+  color: var(--color-dark);
+}
+
+.team-bar-divider {
+  width: 1px;
+  height: 44px;
+  background: #e0e4e8;
+  margin: 0 20px;
+  flex-shrink: 0;
+}
+
+@media (max-width: 600px) {
+  .our-team-bar-members {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 14px;
+  }
+  .team-bar-divider {
+    width: 100%;
+    height: 1px;
+    margin: 0;
+  }
+}
+
 /* ===== Footer ===== */
 footer {
   background: var(--color-black);
@@ -1320,20 +1429,21 @@ footer {
   align-items: center;
   gap: 12px;
   padding: 16px 20px;
-  background: linear-gradient(135deg, var(--color-dark), #0d3b4f);
-  color: var(--color-white);
+  background: #fff;
+  border-bottom: 2px solid #00AEEF;
+  color: var(--color-dark);
 }
 
 .rc-map-header h3 {
   margin: 0;
   font-size: 1rem;
-  color: var(--color-white);
+  color: var(--color-dark);
 }
 
 .rc-map-header p {
   margin: 2px 0 0;
   font-size: .78rem;
-  color: rgba(255,255,255,.65);
+  color: #666;
 }
 
 .rc-map-pin {
@@ -1351,15 +1461,16 @@ footer {
 .map-sidebar {
   width: 130px;
   flex-shrink: 0;
-  background: #0b2530;
+  background: #f7f9fc;
+  border-right: 1px solid #e8ecf0;
   overflow-y: auto;
   padding: 10px 8px;
 }
 
 .map-sidebar-title {
-  color: var(--color-gold);
+  color: var(--color-primary);
   font-size: .72rem;
-  font-weight: 700;
+  font-weight: 800;
   text-transform: uppercase;
   letter-spacing: 1px;
   margin: 0 0 8px;
@@ -1369,28 +1480,30 @@ footer {
 .map-loc-item {
   padding: 8px 10px;
   margin-bottom: 6px;
-  background: rgba(255,255,255,.06);
+  background: #fff;
   border-radius: 8px;
   cursor: pointer;
   border-left: 3px solid transparent;
-  transition: background .2s, border-color .2s;
+  box-shadow: 0 1px 4px rgba(0,0,0,.06);
+  transition: background .2s, border-color .2s, box-shadow .2s;
 }
 
 .map-loc-item:hover,
 .map-loc-item.active {
-  background: rgba(0,174,239,.18);
+  background: #e8f7fd;
   border-left-color: var(--color-primary);
+  box-shadow: 0 2px 8px rgba(0,174,239,.15);
 }
 
 .map-loc-item strong {
   display: block;
-  color: var(--color-white);
+  color: var(--color-dark);
   font-size: .72rem;
   line-height: 1.3;
 }
 
 .map-loc-item small {
-  color: rgba(255,255,255,.45);
+  color: #999;
   font-size: .65rem;
 }
 
@@ -1449,13 +1562,332 @@ footer {
   background: var(--color-white);
   border: 1px solid #e8ecf0;
   border-radius: 14px;
-  padding: 12px 14px;
+  padding: 0;
   box-shadow: 0 2px 12px rgba(0,0,0,.05);
   flex: 1;
+  overflow: hidden;
+}
+
+/* ── 2-column layout ── */
+.reviews-two-col {
+  display: flex;
+  flex-direction: row;
+  height: 100%;
+}
+
+/* Left: review list */
+.reviews-list-col {
+  flex: 1;
+  padding: 12px 14px;
+  overflow-y: auto;
   display: flex;
   flex-direction: column;
-  gap: 7px;
-  overflow: hidden;
+  gap: 6px;
+}
+
+/* Vertical divider */
+.reviews-col-divider {
+  width: 1px;
+  background: #e8ecf0;
+  flex-shrink: 0;
+  margin: 12px 0;
+}
+
+/* Right: add comment form */
+.add-comment-col {
+  width: 180px;
+  flex-shrink: 0;
+  padding: 12px 12px;
+  background: #f7f9fc;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* Avatar preview + name input row */
+.reviewer-input-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.reviewer-avatar-preview {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--color-primary), #0090c5);
+  color: #fff;
+  font-size: 1rem;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: background .3s;
+}
+
+.reviewer-input-row input {
+  flex: 1;
+  min-width: 0;
+  padding: 6px 8px;
+  border: 1.5px solid #e0e4e8;
+  border-radius: 7px;
+  font-size: .78rem;
+  font-family: inherit;
+  background: #fff;
+  transition: border-color .2s;
+}
+.reviewer-input-row input:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 2px rgba(0,174,239,.12);
+}
+
+.add-comment-col textarea {
+  width: 100%;
+  padding: 7px 8px;
+  border: 1.5px solid #e0e4e8;
+  border-radius: 7px;
+  font-family: inherit;
+  font-size: .78rem;
+  background: #fff;
+  resize: none;
+  flex: 1;
+  transition: border-color .2s;
+}
+.add-comment-col textarea:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 2px rgba(0,174,239,.12);
+}
+
+.review-char-line {
+  text-align: right;
+  margin-top: -4px;
+}
+
+/* Star selector */
+.star-selector {
+  display: flex;
+  gap: 3px;
+  align-items: center;
+}
+.star-btn {
+  font-size: 1.25rem;
+  color: #d0d5dc;
+  cursor: pointer;
+  transition: color .15s, transform .1s;
+  user-select: none;
+  line-height: 1;
+}
+.star-btn:hover,
+.star-btn.active { color: #f5a623; transform: scale(1.2); }
+
+/* Post Review button */
+.btn-review-submit {
+  background: linear-gradient(135deg, var(--color-primary), #0090c5);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 8px 0;
+  width: 100%;
+  font-size: .8rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: opacity .2s, transform .15s;
+  letter-spacing: .3px;
+}
+.btn-review-submit:hover:not(:disabled) { opacity: .88; transform: translateY(-1px); }
+.btn-review-submit:disabled { opacity: .6; cursor: not-allowed; }
+
+/* Form feedback message */
+.review-form-msg {
+  font-size: .72rem;
+  min-height: 1em;
+  text-align: center;
+}
+.review-form-msg.success { color: #25D366; font-weight: 600; }
+.review-form-msg.error   { color: #e74c3c; font-weight: 600; }
+
+/* Char count */
+.review-char-count { font-size: .68rem; color: #bbb; }
+
+/* Live review cards */
+.review-live {
+  border-top: 1px dashed #edf0f4;
+  padding-top: 6px;
+  animation: fadeIn .4s ease;
+}
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(5px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.review-stars-live { color: #f5a623; font-size: .72rem; }
+
+.review-date {
+  font-size: .62rem;
+  color: #bbb;
+  margin-left: auto;
+  white-space: nowrap;
+}
+
+.reviews-empty-msg {
+  font-size: .75rem;
+  color: #bbb;
+  text-align: center;
+  padding: 6px 0;
+  margin: 0;
+}
+
+/* Responsive: stack on small screens */
+@media (max-width: 700px) {
+  .reviews-two-col { flex-direction: column; }
+  .add-comment-col { width: 100%; }
+  .reviews-col-divider { width: 100%; height: 1px; margin: 0; }
+}
+
+/* Header row: title + Add Review button */
+.rc-reviews-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 4px;
+}
+
+.add-review-btn {
+  background: var(--color-primary);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 5px 11px;
+  font-size: .75rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background .2s, transform .15s;
+  white-space: nowrap;
+}
+.add-review-btn:hover { background: #0090c5; transform: translateY(-1px); }
+
+/* Add Review collapsible form */
+.add-review-form {
+  background: #f7f9fc;
+  border: 1px solid #e0e4e8;
+  border-radius: 10px;
+  padding: 10px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 6px;
+  animation: fadeSlideDown .25s ease;
+}
+@keyframes fadeSlideDown {
+  from { opacity: 0; transform: translateY(-8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.add-review-form input,
+.add-review-form textarea {
+  width: 100%;
+  padding: 7px 10px;
+  border: 1.5px solid #e0e4e8;
+  border-radius: 7px;
+  font-family: inherit;
+  font-size: .82rem;
+  background: #fff;
+  transition: border-color .2s;
+  resize: none;
+}
+.add-review-form input:focus,
+.add-review-form textarea:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(0,174,239,.12);
+}
+
+/* Star selector */
+.star-selector {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.star-btn {
+  font-size: 1.4rem;
+  color: #ccc;
+  cursor: pointer;
+  transition: color .15s, transform .1s;
+  user-select: none;
+  line-height: 1;
+}
+.star-btn:hover,
+.star-btn.active { color: #f5a623; transform: scale(1.15); }
+.star-hint {
+  font-size: .72rem;
+  color: #999;
+  margin-left: 6px;
+}
+
+/* Form actions row */
+.review-form-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.btn-review-submit {
+  background: linear-gradient(135deg, var(--color-primary), #0090c5);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 7px 16px;
+  font-size: .82rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: opacity .2s, transform .15s;
+}
+.btn-review-submit:hover:not(:disabled) { opacity: .88; transform: translateY(-1px); }
+.btn-review-submit:disabled { opacity: .6; cursor: not-allowed; }
+
+.review-char-count {
+  font-size: .7rem;
+  color: #aaa;
+}
+
+/* Form status message */
+.review-form-msg {
+  font-size: .78rem;
+  min-height: 1.2em;
+  border-radius: 6px;
+  padding: 2px 0;
+}
+.review-form-msg.success { color: #25D366; font-weight: 600; }
+.review-form-msg.error   { color: #e74c3c; font-weight: 600; }
+
+/* Live review cards from Firestore */
+.review-live {
+  border-top: 1px dashed #e8ecf0;
+  padding-top: 7px;
+  animation: fadeIn .4s ease;
+}
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.review-date {
+  font-size: .65rem;
+  color: #bbb;
+  margin-left: auto;
+  white-space: nowrap;
+}
+
+.reviews-empty-msg {
+  font-size: .78rem;
+  color: #aaa;
+  text-align: center;
+  padding: 8px 0;
+  margin: 0;
 }
 
 /* Shrink review items inside the box */
@@ -1663,3 +2095,171 @@ footer {
     width: 110px
   }
 }
+
+/* ================================================================
+   MAP IMPROVEMENTS — Dark theme + pulse markers + branded popup
+   ================================================================ */
+
+/* ── Animated pulse marker ─────────────────────────────────────── */
+.mr-pin-wrap {
+  position: relative;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.mr-pin-dot {
+  width: 18px;
+  height: 18px;
+  border-radius: 50% 50% 50% 0;
+  background: linear-gradient(135deg, #00AEEF, #0077aa);
+  border: 2.5px solid #daa520;
+  transform: rotate(-45deg);
+  box-shadow: 0 2px 8px rgba(0,174,239,.6);
+  position: relative;
+  z-index: 2;
+  transition: transform .2s, background .2s;
+}
+
+/* Active (selected) marker — gold */
+.mr-pin-active .mr-pin-dot {
+  background: linear-gradient(135deg, #daa520, #b8860b);
+  border-color: #fff;
+  transform: rotate(-45deg) scale(1.25);
+}
+
+.mr-pin-pulse {
+  position: absolute;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: rgba(0, 174, 239, 0.25);
+  animation: mapPulse 2s ease-out infinite;
+  z-index: 1;
+}
+
+.mr-pin-active .mr-pin-pulse {
+  background: rgba(218, 165, 32, 0.3);
+}
+
+@keyframes mapPulse {
+  0%   { transform: scale(0.4); opacity: 1; }
+  100% { transform: scale(2.2); opacity: 0; }
+}
+
+/* ── Fit-All button ────────────────────────────────────────────── */
+.map-fitall-btn {
+  background: #fff;
+  color: #00AEEF;
+  border: 1.5px solid #00AEEF;
+  border-radius: 8px;
+  width: 34px;
+  height: 34px;
+  font-size: 1.1rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 8px rgba(0,0,0,.15);
+  transition: background .2s, color .2s;
+  line-height: 1;
+}
+.map-fitall-btn:hover {
+  background: #00AEEF;
+  color: #fff;
+}
+
+/* ── Leaflet popup override — white branded ────────────────────── */
+.mr-map-popup .leaflet-popup-content-wrapper {
+  background: #fff;
+  border: 1.5px solid #00AEEF;
+  border-radius: 12px;
+  box-shadow: 0 6px 24px rgba(0,0,0,.15);
+  padding: 0;
+  overflow: hidden;
+}
+
+.mr-map-popup .leaflet-popup-tip {
+  background: #fff;
+}
+
+.mr-map-popup .leaflet-popup-content {
+  margin: 0;
+  width: 220px !important;
+}
+
+.mr-popup-inner {
+  overflow: hidden;
+  border-radius: 12px;
+}
+
+/* Popup image slider */
+.mr-map-popup .map-popup-slider {
+  position: relative;
+  width: 100%;
+  height: 130px;
+  overflow: hidden;
+  background: #eef2f5;
+}
+
+.mr-map-popup .map-popup-slider img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  transition: opacity .5s ease;
+}
+
+.mr-map-popup .map-popup-slider img.active {
+  opacity: 1;
+}
+
+/* Popup footer */
+.mr-popup-footer {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 9px 12px;
+  background: #fff;
+  color: #0b2530;
+  font-size: .82rem;
+  font-weight: 600;
+  border-top: 2px solid #00AEEF;
+}
+
+.mr-popup-dot {
+  font-size: .9rem;
+}
+
+/* Leaflet close button tweak */
+.mr-map-popup .leaflet-popup-close-button {
+  color: #00AEEF !important;
+  font-size: 18px !important;
+  top: 4px !important;
+  right: 6px !important;
+}
+
+/* Zoom controls — white theme */
+.leaflet-bar a {
+  background: #fff !important;
+  color: #00AEEF !important;
+  border-color: #e0e4e8 !important;
+  font-weight: 700 !important;
+}
+.leaflet-bar a:hover {
+  background: #00AEEF !important;
+  color: #fff !important;
+}
+
+/* Attribution light */
+.leaflet-control-attribution {
+  background: rgba(255,255,255,.90) !important;
+  color: #888 !important;
+  font-size: .62rem !important;
+  border-radius: 4px !important;
+}
+.leaflet-control-attribution a { color: #00AEEF !important; }
