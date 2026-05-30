@@ -31,12 +31,19 @@ document.addEventListener('DOMContentLoaded', () => {
   const nums = document.querySelectorAll('.num');
   const animate = (el) => {
     const target = +el.dataset.target;
+    const suffix = el.dataset.suffix || '';
     let curr = 0;
-    const step = Math.max(1, Math.round(target / 40));
+    // Use more steps for large numbers so animation is smooth but fast
+    const totalSteps = 60;
+    const step = Math.max(1, Math.round(target / totalSteps));
     const tick = () => {
       curr += step;
-      if (curr >= target) { el.textContent = target; }
-      else { el.textContent = curr; requestAnimationFrame(tick); }
+      if (curr >= target) {
+        el.textContent = target.toLocaleString() + suffix;
+      } else {
+        el.textContent = curr.toLocaleString() + suffix;
+        requestAnimationFrame(tick);
+      }
     };
     requestAnimationFrame(tick);
   };

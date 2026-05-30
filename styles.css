@@ -1137,6 +1137,58 @@ footer {
   gap: 8px;
 }
 
+/* Large 2-card layout for team */
+.team-row-main {
+  display: flex;
+  justify-content: center;
+  gap: 28px;
+  flex-wrap: wrap;
+  width: 100%;
+  margin-top: 12px;
+}
+
+.team-card-large {
+  background: var(--color-white);
+  border-radius: 16px;
+  padding: 24px 20px 20px;
+  border: 1px solid #e8ecf0;
+  box-shadow: 0 4px 20px rgba(0,0,0,.08);
+  width: 170px;
+  text-align: center;
+  transition: transform .3s ease, box-shadow .3s ease;
+}
+
+.team-card-large:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 10px 30px rgba(0,0,0,.14);
+}
+
+.team-card-label {
+  font-size: .72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--color-primary);
+  margin: 0 0 12px;
+}
+
+.team-photo-lg {
+  width: 100px;
+  height: 100px;
+  margin: 0 auto 14px;
+}
+
+.team-photo-lg .team-initial {
+  font-size: 2.6rem;
+}
+
+.team-name-lg {
+  font-size: .88rem;
+  font-weight: 800;
+  margin: 0 0 4px;
+  color: var(--color-dark);
+}
+
 .team-heading {
   font-size: clamp(1.4rem, 2.5vw, 2rem);
   font-weight: 900;
@@ -1291,7 +1343,8 @@ footer {
 
 .rc-map-body {
   display: flex;
-  height: 420px;
+  flex: 1;
+  min-height: 360px;
 }
 
 /* Mini sidebar inside the map panel */
